@@ -93,7 +93,7 @@ describe Student do
     describe '#save' do 
       it 'saves the student to the db' do 
         new_student.save
-        expect(DB[:conn].execute("SELECT * FROM students WHERE name = 'Sam'")).to eq([{"id"=>1, "name"=>"Sam", "grade"=>11, 0=>1, 1=>"Sam", 2=>11}])
+        expect(DB[:conn].execute("SELECT * FROM students WHERE name = 'Sam'")).to eq([{"id"=>1, "name"=>"Sam", "grade"=>11}])
       end
 
       it 'sets the student\'s id' do
@@ -106,7 +106,7 @@ describe Student do
   describe '.find_by_name' do 
     it 'executes the SQL to find a row by name' do 
       Student.new({name: "Jan", grade: 10}).save
-      expect(Student.find_by_name("Jan")).to eq([{"id"=>1, "name"=>"Jan", "grade"=>10, 0=>1, 1=>"Jan", 2=>10}])
+      expect(Student.find_by_name("Jan")).to eq([{"id"=>1, "name"=>"Jan", "grade"=>10}])
     end
   end
 
