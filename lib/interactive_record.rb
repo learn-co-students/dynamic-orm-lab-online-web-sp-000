@@ -10,6 +10,7 @@ class InteractiveRecord
 
   def self.column_names
     #returns an array of SQL column names ["id", "name", "album"]
+    DB[:conn].results_as_hash = true
 
     sql = "PRAGMA table_info('#{table_name}')"
 
@@ -50,10 +51,13 @@ class InteractiveRecord
   end
 
   def save
-    sql = "INSERT INTO #{table_name_for_insert} (#{col_names_for_insert}) VALUES (#{values_for_insert})"
+    sql = <<-SQL
+    INSERT INTO #{table_name_for_insert} (#{col_names_for_insert})
+    VALUES (#{values_for_insert})
+    SQL
+
     DB[:conn].execute(sql)
-    self.id = DB[:conn].execute("SELECT last_insert_rowid() FROM #{table_name_for_insert}")[0][0]
-    sql
+    @id = DB[:conn].execute("SELECT last_insert_rowid() FROM #{table_name_for_insert}")[0][0]
   end
 
   def self.find_by_name(name)
