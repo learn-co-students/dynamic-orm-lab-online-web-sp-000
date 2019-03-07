@@ -72,7 +72,7 @@ class InteractiveRecord
 
     sql = <<-SQL
       SELECT *
-      FROM #{self.table_name}
+      FROM #{table_name}
       WHERE #{column_name} = ?
     SQL
 
