@@ -71,15 +71,13 @@ class InteractiveRecord
 
   def self.find_by(attr)
     attr.each do |key, value|
-
-        binding.pry
       sql = <<-SQL
         SELECT *
         FROM #{table_name}
-        WHERE ? = ?
+        WHERE #{key.to_s} = #{value}
       SQL
 
-      return DB[:conn].execute(sql, key.to_s, value)
+      return DB[:conn].execute(sql)
     end
   end
 end
