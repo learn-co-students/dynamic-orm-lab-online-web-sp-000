@@ -70,8 +70,9 @@ class InteractiveRecord
   end
 
   def self.find_by(attr)
-    binding.pry
     attr.each do |key, value|
+
+        binding.pry
       sql = <<-SQL
         SELECT *
         FROM #{table_name}
