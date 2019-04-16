@@ -39,9 +39,24 @@ class InteractiveRecord
 
   def values_for_insert
     values = []
-    col_names_for_insert.each do |attribute|
-      values << self.send("'#{attribute}'") unless self.attribute = nil
+    self.class.column_names.each do |attribute|
+      values << "'#{self.send(attribute)}'" unless self.send(attribute) == nil
     end
     values.join(', ')
+  end
+
+  def save
+    binding.pry
+    if self.id
+      self.update
+    else
+      sql = <<-SQL
+        UPDATE #{table_name_for_insert} (#{col_names_for_insert})
+        VALUES (#{values_for_insert})
+      SQL
+
+      DB[:conn].execute(sql)
+      self.id = DB[:conn].execute("SELECT last_insert_rowid() FROM #{table_name_for_insert};")
+    end
   end
 end
