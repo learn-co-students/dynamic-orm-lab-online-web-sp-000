@@ -56,11 +56,13 @@ class InteractiveRecord
   end
 
   def self.find_by_name(name)
-    DB[:conn].results_as_hash = true
-    hash=DB[:conn].execute("SELECT * FROM #{table_name} WHERE name=?",name)[0]
+    hash=DB[:conn].execute("SELECT * FROM #{table_name} WHERE name=?",name)
   end
 
-  def self.find_by
+  def self.find_by(hash)
+    DB[:conn].execute("SELECT * FROM #{table_name} WHERE #{hash.keys.first}='#{hash.values.first}'")
+  end
+
 
 
 
