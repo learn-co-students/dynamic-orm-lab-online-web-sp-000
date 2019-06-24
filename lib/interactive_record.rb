@@ -65,7 +65,6 @@ class InteractiveRecord
       sql = <<-SQL
         SELECT * FROM #{self.table_name} WHERE #{key.to_s} = "#{value}"
       SQL
-      #binding.pry
       row = DB[:conn].execute(sql)
     end.first
     row
