@@ -21,12 +21,11 @@ class InteractiveRecord
     attributes_hash.each do |keys, value|
       self.send("#{keys}=", value)
     end
-    self
   end
 
-  def self.creates_attr_acc
-    self.column_names.collect do |column_name|
-      attr_accessor(column_name)
+  def self.define_attributes
+    self.column_names.each do |col_name|
+      attr_accessor col_name.to_sym
     end
   end
 
