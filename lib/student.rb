@@ -3,25 +3,7 @@ require 'active_support/inflector'
 require 'interactive_record.rb'
 
 class Student < InteractiveRecord
-
-  def self.table_name
-    self.to_s.downcase.pluralize
-  end
-
-  def self.column_names
-    sql = "PRAGMA table_info('#{table_name}')"
-    table_info = DB[:conn].execute(sql)
-    column_names = []
-    table_info.each do |column|
-      column_names << column["name"]
+    self.column_names.each do |c|
+      attr_accessor c.to_sym
     end
-    column_names.compact
-  end
-
-  def initialize(attributes={})
-    attributes.each do |p, v|
-      self.send("#{p}=", v)
-    end
-  end
-  
 end
