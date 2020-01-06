@@ -60,11 +60,17 @@ class InteractiveRecord
   end
   
   def self.find_by(hsh)
-    att = hsh.keys[0].to_s
-    val = hsh.values[0].to_s
-    sql = "SELECT * FROM #{self.table_name} WHERE #{att} = #{val}"
-    DB[:conn].execute(sql)
+    begin
+      val = Integer(hsh.values.first)
+    rescue ArgumentError
+      val = hsh.values.first.to_s
+      val = "'" + val + "'"
+    end
+    attr = hsh.keys.first.to_s
+    # sql = "SELECT * FROM #{self.table_name} WHERE #{hsh.keys.first} = #{val}"
+    sql = "SELECT * FROM #{self.table_name} WHERE ? = ?"
+    # binding.pry
+    # DB[:conn].execute(sql)
+    DB[:conn].execute(sql, attr, val)
   end
-  
-  
 end
