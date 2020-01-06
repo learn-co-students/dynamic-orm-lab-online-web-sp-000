@@ -68,7 +68,7 @@ class InteractiveRecord
     end
     # sql = "SELECT * FROM #{self.table_name} WHERE #{hsh.keys.first} = #{val}"
     # DB[:conn].execute(sql)
-    # binding.pry
+    binding.pry
     sql = "SELECT * FROM #{self.table_name} WHERE ? = ?"
     DB[:conn].execute(sql, hsh.keys.first.to_s, val)
   end
