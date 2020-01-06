@@ -63,6 +63,7 @@ class InteractiveRecord
     att = hsh.keys[0].to_s
     val = hsh.values[0].to_s
     sql = "SELECT * FROM #{self.table_name} WHERE #{att} = #{val}"
+    DB[:conn].execute(sql)
   end
   
   
