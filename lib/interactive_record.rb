@@ -66,11 +66,10 @@ class InteractiveRecord
       val = hsh.values.first.to_s
       val = "'" + val + "'"
     end
-    attr = hsh.keys.first.to_s
     # sql = "SELECT * FROM #{self.table_name} WHERE #{hsh.keys.first} = #{val}"
-    sql = "SELECT * FROM #{self.table_name} WHERE ? = ?"
-    # binding.pry
     # DB[:conn].execute(sql)
-    DB[:conn].execute(sql, attr, val)
+    # binding.pry
+    sql = "SELECT * FROM #{self.table_name} WHERE ? = ?"
+    DB[:conn].execute(sql, hsh.keys.first.to_s, val)
   end
 end
