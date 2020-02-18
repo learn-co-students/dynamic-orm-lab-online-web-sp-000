@@ -70,6 +70,8 @@ class InteractiveRecord
     def self.find_by(row)
         # find_by executes the SQL to find a row by the attribute passed into the method
         # accounts for when an attribute value is an integer
+        sql = "SELECT * FROM #{self.table_name} WHERE id OR name OR grade = '#{row}' LIMIT 1"
+        DB[:conn].execute(sql)
     end 
   
 end
