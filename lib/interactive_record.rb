@@ -38,9 +38,20 @@ class InteractiveRecord
     end 
 
     def values_for_insert 
+        # formats the column names to be used in a SQL statement
+        values = [] 
+        self.class.column_names.each do |col|
+            values << "'#{send(col)}'" unless send(col).nil? 
+        end 
+        values.join(", ")
     end 
 
     def save 
+        # saves student to database 
+        sql = "INSERT INTO #{table_name_for_insert} (#{col_names_for_insert}) VALUES (#{values_for_insert})"
+        DB[:conn].execute(sql)
+        @id = DB[:conn].execute("SELECT last_insert_rowid() FROM #{table_name_for_insert}")
+        binding.pry 
     end 
 
     def self.find_by_name(name)
