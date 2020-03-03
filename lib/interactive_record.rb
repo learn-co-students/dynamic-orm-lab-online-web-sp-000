@@ -49,11 +49,24 @@ class InteractiveRecord
 
   def save
         #  binding.pry
-  DB[:conn].execute("INSERT INTO #{table_name_for_insert} (#{col_names_for_insert}) VALUES (?)", [values_for_insert])
+        sql = <<-SQL " INSERT INTO #{table_name_for_insert} (#{col_names_for_insert}) VALUES (#{values_for_insert})"
+        SQL
+        DB[:conn].execute(sql)
+  # DB[:conn].execute("INSERT INTO #{table_name_for_insert} (#{col_names_for_insert}) VALUES (?)", [values_for_insert])
+    @id = DB[:conn].execute("SELECT last_insert_rowid() FROM #{table_name_for_insert}")[0][0]
+  end
 
-  DB[:conn].execute("SELECT last_insert_rowid() FROM #{table_name_for_insert}")[0][0]
+  def self.find_by_name(name)
+    DB[:conn].execute("SELECT * FROM #{self.table_name} WHERE name = ?", [name])
+  end
 
-end
+  def self.find_by(attr)
+     #binding.pry
+    sql = <<-SQL
+      SELECT * FROM #{self.table_name} WHERE #{attr.keys[0]} = ?
+    SQL
+    DB[:conn].execute(sql, attr.values[0])
+  end
 
 
 end
