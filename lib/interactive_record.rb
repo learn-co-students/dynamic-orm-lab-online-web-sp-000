@@ -1,5 +1,6 @@
 require_relative "../config/environment.rb"
 require 'active_support/inflector'
+require 'pry' 
 
 class InteractiveRecord
   
@@ -41,15 +42,28 @@ class InteractiveRecord
   end 
   
   def save 
-    DB[:conn].execute("INSERT INTO #{table_name_for_insert} (#{col_names_for_insert}) VALUES (?)", [values_for_insert])
+    sql = <<-SQL 
+    INSERT INTO #{table_name_for_insert} (#{col_names_for_insert}) VALUES (#{values_for_insert})
+    SQL
+    
+    DB[:conn].execute(sql)
     @id = DB[:conn].execute("SELECT last_insert_rowid() FROM #{table_name_for_insert}")[0][0]
   end 
   
   def self.find_by_name(name) 
-    DB[:conn].execute("SELECT * FROM  #{self.table_name} WHERE name = ?", [name])
+    DB[:conn].execute("SELECT * FROM  #{self.table_name} WHERE name = ?", name)
   end 
 
-  def self.find_by(item)
-    DB[:conn].execute("SELECT * FROM #{self.table_name} WHERE = ?", item)
+  def self.find_by(options={})
+    key = options.keys 
+    val = options.values 
+    #need to convert key to col_name 
+    sql = <<-SQL
+      SELECT * FROM #{self.table_name} WHERE #{key} = #{val} 
+    SQL
+    row = DB[:conn].execute(sql).flatten 
+    binding.pry 
+    row 
   end 
 end
+
