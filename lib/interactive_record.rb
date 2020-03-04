@@ -55,15 +55,10 @@ class InteractiveRecord
   end 
 
   def self.find_by(options={})
-    key = options.keys.to_s 
-    val = options.values 
-
-    sql = <<-SQL
-      SELECT * FROM #{self.table_name} WHERE #{key} = #{val} 
-    SQL
-    row = DB[:conn].execute(sql).flatten 
-    binding.pry 
+    key = options.keys.join(" ") 
+    val = options.values.join(" ") 
+    sql = "SELECT * FROM #{self.table_name} WHERE #{key} = '#{val}'"
+    row = DB[:conn].execute(sql)
     row 
   end
 end
-
