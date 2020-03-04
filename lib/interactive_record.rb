@@ -55,15 +55,15 @@ class InteractiveRecord
   end 
 
   def self.find_by(options={})
-    key = options.keys 
+    key = options.keys.to_s 
     val = options.values 
-    #need to convert key to col_name 
+
     sql = <<-SQL
       SELECT * FROM #{self.table_name} WHERE #{key} = #{val} 
     SQL
     row = DB[:conn].execute(sql).flatten 
     binding.pry 
     row 
-  end 
+  end
 end
 
