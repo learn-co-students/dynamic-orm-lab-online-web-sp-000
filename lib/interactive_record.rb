@@ -51,6 +51,9 @@ class InteractiveRecord
   end
 
   def find_by(params)
-    DB[:conn].execute("SELECT * FROM #{self.table_name} WHERE name = ?", params)
+    params.each do |property, value|
+      DB[:conn].execute("SELECT * FROM #{self.table_name} WHERE #{property} = ?", value)
+      # self.send("#{property}=", value)
+    end
   end
 end
