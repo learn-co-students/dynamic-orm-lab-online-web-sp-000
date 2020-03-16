@@ -33,7 +33,22 @@ class InteractiveRecord
   end
 
   def values_for_insert
-    binding.pry
-    # self.class.column_names.delete_if {|col| col == "id"}.join(", ")
+    values = []
+    col_names_for_insert.split(", ").each do |col|
+      # values << '\'' + self.send("#{col}") + '\''
+      values << "'#{send(col)}'"
+    end
+    values.join(", ")
+  end
+
+  def save
+    DB[:conn].execute("INSERT INTO #{table_name_for_insert} (#{col_names_for_insert}) VALUES (#{values_for_insert}")
+    @id = DB[:conn].execute("SELECT last_inser_rowid() FROM #{table_name_for_insert}")[0][0]
+  end
+
+  def find_by_name
+  end
+
+  def find_by
   end
 end
