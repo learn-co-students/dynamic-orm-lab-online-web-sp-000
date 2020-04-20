@@ -58,12 +58,15 @@ class InteractiveRecord
   end
 
   def self.find_by_name(name)
-    DB[:conn].execute("SELECT * FROM #{self.table_name} WHERE name = #{name}")
+    DB[:conn].execute("SELECT * FROM #{self.table_name} WHERE name = '#{name}'")
   end
 
   # Find by an abstract value
-  def self.find_by(attribute)
-
+  def self.find_by(attributes)
+    sql = <<-SQL
+    SELECT * FROM #{self.table_name} WHERE #{attributes.keys[0].to_s} = '#{attributes.values[0]}'
+    SQL
+    DB[:conn].execute(sql)
   end
 
 end
