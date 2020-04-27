@@ -2,7 +2,6 @@ require_relative "../config/environment.rb"
 require 'active_support/inflector'
 
 class InteractiveRecord
-    attr_accessor :id, :name, :grade
 
     def self.table_name
         self.to_s.downcase.pluralize
@@ -14,20 +13,23 @@ class InteractiveRecord
         sql = "PRAGMA table_info('#{table_name}')"
  
         table_info = DB[:conn].execute(sql)
+        # binding.pry
+        # table_info.each do |hash|
+        #     hash.delete_if {|k, v| k == k.to_i}
+        # end
+        
+            
         column_names = []
 
         table_info.map {|column| column["name"]}.compact
-        
+    
+        # h.delete_if {|key, value| key >= "b" } 
     end
 
     def initialize(options={})
         options.each do |property, value|
           self.send("#{property}=", value)
         end
-    end
-
-    self.column_names.each do |col_name|
-        attr_accessor col_name.to_sym
     end
 
     def table_name_for_insert
@@ -45,28 +47,32 @@ class InteractiveRecord
         end
         values.join(", ")
     end
-
-    def save
-        DB[:conn].execute("INSERT INTO #{table_name_for_insert} (#{col_names_for_insert}) VALUES (?)", [values_for_insert])
-       
-        @id = DB[:conn].execute("SELECT last_insert_rowid() FROM #{table_name_for_insert}")[0][0]
-    end
-
-    # def save
-    #     DB[:conn].execute("INSERT INTO #{table_name_for_insert} (#{col_names_for_insert}) VALUES (?)", [values_for_insert])
-       
-    #     @id = DB[:conn].execute("SELECT last_insert_rowid() FROM #{table_name_for_insert}")[0][0]
-    # end
     
     def save
         sql = <<-SQL
           INSERT INTO #{table_name_for_insert}(#{col_names_for_insert})
           VALUES (#{values_for_insert})
           SQL
-    
+
         DB[:conn].execute(sql)
 
         @id = DB[:conn].execute("SELECT last_insert_rowid() FROM #{table_name_for_insert}")[0][0]
-      end
+    end
+
+    def self.find_by_name(name) 
+        DB[:conn].execute("SELECT * FROM #{self.table_name} WHERE name = ?", [name])
+    end
+
+    def self.find_by(attribute)
+        column_name = attribute.keys[0].to_s
+        value_name = attribute.values[0]
+    
+        sql = <<-SQL
+          SELECT * FROM #{table_name}
+          WHERE #{column_name} = ?
+          SQL
+    
+        DB[:conn].execute(sql, value_name);
+    end
 end
-        
+
