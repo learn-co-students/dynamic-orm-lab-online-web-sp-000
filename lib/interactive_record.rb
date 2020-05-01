@@ -55,4 +55,13 @@ class InteractiveRecord
         sql = "SELECT * FROM #{self.table_name} WHERE name = ?" 
         DB[:conn].execute(sql, name)
     end
+
+    def self.find_by(attr)
+        sql = <<-SQL
+            SELECT * 
+            FROM #{self.table_name}
+            WHERE #{attr.keys.first} = ? 
+        SQL
+        DB[:conn].execute(sql, attr.values.first) 
+    end
 end
