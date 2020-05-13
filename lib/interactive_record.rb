@@ -24,6 +24,7 @@ class InteractiveRecord
   def attr_accessor
   end
 
-
+  def
+  end
 
 end
