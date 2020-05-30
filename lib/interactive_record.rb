@@ -41,10 +41,18 @@ end
 values.join(", ")
 end
 
+def self.question_marks
+    (self.column_names.size - 1).times.collect{"?"}.join(",")
+end
+
+def att_values
+    self.class.column_names[1..-1].collect{|att_name|
+    self.send(att_name)}
+end
 
 def save 
-
-DB[:conn].execute("INSERT INTO #{table_name_for_insert} (#{col_names_for_insert}) VALUES (#{values_for_insert})")
+#binding.pry
+DB[:conn].execute("INSERT INTO #{table_name_for_insert} (#{col_names_for_insert}) VALUES (#{self.class.question_marks})", *self.att_values)
 @id = DB[:conn].execute("SELECT last_insert_rowid() FROM #{table_name_for_insert}")[0][0]
 
 end
