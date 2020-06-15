@@ -59,12 +59,16 @@ class InteractiveRecord
     end
 
     def self.find_by(att)
+      a = att.keys
+      a = a[0].to_s
+      b = att.values
+      b = b[0].to_s
       sql =
       "SELECT *
       FROM #{table_name}
-      WHERE att.keys = ?"
+      WHERE #{a} = ?"
 
-      binding.pry
-      DB[:conn].execute(sql, att.values)
+      # binding.pry
+      DB[:conn].execute(sql, b)
     end
 end
