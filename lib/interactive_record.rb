@@ -72,7 +72,8 @@ class InteractiveRecord
     sql = <<-SQL
     SELECT * FROM #{self.to_s.downcase.pluralize} WHERE #{attribute.keys[0].to_s} = ?
     SQL
-    #binding.pry
+    binding.pry
     DB[:conn].execute(sql, attribute.values[0].to_s)
+    
   end
 end
