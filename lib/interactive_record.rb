@@ -51,9 +51,7 @@ class InteractiveRecord
   end
 
   def self.find_by(hash)
-    #  binding.pry
     key = hash.keys[0]
-
     if hash.values[0].class == Fixnum
       value = hash.values[0]
     else
