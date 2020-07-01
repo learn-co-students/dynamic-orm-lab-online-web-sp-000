@@ -50,7 +50,7 @@ class InteractiveRecord
     values_insert
   end
   def save
-    
+    #binding.pry
     sql = "INSERT INTO #{table_name_for_insert} (#{col_names_for_insert}) VALUES (#{values_for_insert})"
 
     DB[:conn].execute(sql)
@@ -72,7 +72,7 @@ class InteractiveRecord
     sql = <<-SQL
     SELECT * FROM #{self.to_s.downcase.pluralize} WHERE #{attribute.keys[0].to_s} = ?
     SQL
-    binding.pry
+    #binding.pry
     DB[:conn].execute(sql, attribute.values[0].to_s)
     
   end
