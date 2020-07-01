@@ -51,11 +51,16 @@ class InteractiveRecord
   end
 
   def self.find_by(hash)
-     binding.pry
+    #  binding.pry
     key = hash.keys[0]
-    value = hash.values[0]
-    sql = "SELECT * FROM #{self.table_name} WHERE hash = ? "
-    DB[:conn].execute(sql, hash.value)
+
+    if hash.values[0].class == Fixnum
+      value = hash.values[0]
+    else
+      value = "'#{hash.values[0]}'"
+    end
+    sql = "SELECT * FROM #{self.table_name} WHERE #{key} = #{value} "
+    DB[:conn].execute(sql)
   end
 
 end
