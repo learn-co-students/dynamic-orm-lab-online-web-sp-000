@@ -54,7 +54,7 @@ class InteractiveRecord
 
     def self.find_by(hash)
         hash_value= hash.values.first
-        if hash_value.class != Fixnum
+        if hash_value.class == String
             sql = "SELECT * FROM #{self.table_name} WHERE #{hash.keys.first} = '#{hash_value}'"
             DB[:conn].execute(sql)
         else number = "#{hash_value}"
