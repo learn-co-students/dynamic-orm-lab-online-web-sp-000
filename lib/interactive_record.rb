@@ -57,8 +57,8 @@ class InteractiveRecord
         if hash_value.class == String
             sql = "SELECT * FROM #{self.table_name} WHERE #{hash.keys.first} = '#{hash_value}'"
             DB[:conn].execute(sql)
-        else number = "#{hash_value}"
-            sql = "SELECT * FROM #{self.table_name} WHERE #{hash.keys.first} = #{number}"
+        else 
+            sql = "SELECT * FROM #{self.table_name} WHERE #{hash.keys.first} = #{hash_value.to_i}"
             DB[:conn].execute(sql)
         end
         
