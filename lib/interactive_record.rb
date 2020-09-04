@@ -19,6 +19,16 @@ class InteractiveRecord
         column_names.compact
     end
 
+    def initialize(hash={})
+        hash.each do |property, value|
+          self.send("#{property}=", value)
+        end
+    end
+
+    self.column_names.each do |column_name|
+        attr_accessor column_name.to_sym
+    end
+
     # sql = <<-SQL
         
     # SQL
