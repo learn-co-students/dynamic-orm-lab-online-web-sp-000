@@ -9,7 +9,7 @@ class InteractiveRecord
     
     def self.column_names
         DB[:conn].results_as_hash = true
-       
+
         sql = "PRAGMA table_info('#{table_name}')"
        
         table_info = DB[:conn].execute(sql)
@@ -50,16 +50,34 @@ class InteractiveRecord
             VALUES (#{values_for_insert})
         SQL
         DB[:conn].execute(sql)
+
        
         @id = DB[:conn].execute("SELECT last_insert_rowid() FROM #{table_name_for_insert}")[0][0]
     end
 
     def self.find_by_name(name)
         sql = <<-SQL 
-            SELECT * FROM #{table_name_for_insert}
+            SELECT * FROM #{table_name}
             WHERE name = ?
         SQL
 
         DB[:conn].execute(sql, name)
+    end
+
+    def self.find_by_grade(grade)
+        sql = <<-SQL 
+            SELECT * FROM #{table_name}
+            WHERE grade = ?
+        SQL
+
+        DB[:conn].execute(sql, grade)
+    end
+
+    def self.find_by(name: name = nil, grade: grade = nil)
+        if name == nil
+            self.find_by_grade(grade)
+        else
+            self.find_by_name(name)
+        end
     end
 end
