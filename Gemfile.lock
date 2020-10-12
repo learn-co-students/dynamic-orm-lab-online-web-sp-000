@@ -12,6 +12,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  activesupport
   pry
   sqlite3
 
