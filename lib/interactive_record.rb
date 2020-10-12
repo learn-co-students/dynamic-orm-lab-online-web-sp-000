@@ -1,4 +1,5 @@
 require_relative "../config/environment.rb"
+require 'rubygems'
 require 'active_support/inflector'
 
 class InteractiveRecord
