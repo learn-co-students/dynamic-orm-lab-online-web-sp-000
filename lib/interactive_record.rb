@@ -15,9 +15,7 @@ class InteractiveRecord
         table_info.each do |column|
             column_names << column["name"]
         end
-        col_name = column_names.compact
         column_names.compact
-        attr_accessor col_name.to_sym
     end
 
     def initialize(options={})
