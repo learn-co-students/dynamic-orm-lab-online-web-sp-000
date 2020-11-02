@@ -35,13 +35,8 @@ class InteractiveRecord
   end
   
   def values_for_insert_skip_wierd_format
-    # Due to the difference in how the values are inserted into the database (directly vs. with bound parameters), calling values_for_insert.split(", ") won't work.
-    
-    # That would cause a Student to have these values: 
-    # [{"id"=>1, "name"=>"'Sam'", "grade"=>"'11'", 0=>1, 1=>"'Sam'", 2=>"'11'"}]
-    # instead of these values: 
-    # [{"id"=>1, "name"=>"Sam", "grade"=>11, 0=>1, 1=>"Sam", 2=>11}]. Tricky bug!!!
-    
+    # the return value from the above method kept making the tests fail
+    # this was a little work around to fix that. Although solved, still confused here.    
     self.class.column_names.collect {|col_name| self.send(col_name)}.compact
   end
   
