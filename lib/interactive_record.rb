@@ -61,11 +61,10 @@ class InteractiveRecord
       end
 
       def self.find_by(attr)
-        attrs = attr.keys[1..-1].collect(" = ?").join(", ")
+        attrs = attr.keys.collect{|attribute_name|"#{attribute_name} = ?"}.join(", ")
         sql = <<-SQL
-        SELECT * FROM #{table_name} WHERE #{attrs} = ?
+        SELECT * FROM #{table_name} WHERE #{attrs}
         SQL
-        puts sql
         DB[:conn].execute(sql, *attr.values)
       end
       
