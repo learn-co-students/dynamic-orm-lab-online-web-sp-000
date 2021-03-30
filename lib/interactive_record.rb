@@ -60,7 +60,9 @@ class InteractiveRecord
   
   def self.find_by(attributes)
     key, value = attributes.first
-    sql = "SELECT * FROM #{self.table_name} WHERE #{key.to_s} = '#{value.to_s}'"
-    DB[:conn].execute(sql)
+    sql = "SELECT * FROM #{self.table_name} WHERE #{key.to_s} = ?"
+    DB[:conn].execute(sql, value.to_s)
   end
+  
+  # note to future self. You cant use ? for the column name because sql will not allow it. 
 end
