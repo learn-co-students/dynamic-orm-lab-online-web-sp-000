@@ -49,9 +49,32 @@ class InteractiveRecord
     end
 
     def save
-        sql = "INSERT INTO #{table_name_for_insert} (#{col_names_for_insert}) VALUES (?)" 
-        DB[:conn].execute(sql, values_for_insert)
+        sql = "INSERT INTO #{table_name_for_insert} (#{col_names_for_insert}) VALUES (#{values_for_insert})"
+        DB[:conn].execute(sql)
+
+        # Is it possible to use bound parameters?
+        # sql = "INSERT INTO #{table_name_for_insert} (#{col_names_for_insert}) VALUES (?)" 
+        # DB[:conn].execute(sql, values_for_insert)
 
         @id = DB[:conn].execute("SELECT last_insert_rowid() FROM #{table_name_for_insert}")[0][0]
+    end
+
+    def self.find_by_name(name)
+        sql = "SELECT * FROM #{self.table_name} WHERE name = ?"
+        DB[:conn].execute(sql, name)
+    end
+
+    #def self.find_by(att)
+        # att_key = att.keys.join
+        # att_value = att.values.join
+
+        # sql = "SELECT * FROM #{self.table_name} WHERE #{att_key} = ?"
+        # DB[:conn].execute(sql, att_value)
+#    end
+    def self.find_by(attribute_hash)
+        value = attribute_hash.values.first
+        formatted_value = value.class == Fixnum ? value : "'#{value}'"
+        sql = "SELECT * FROM #{self.table_name} WHERE #{attribute_hash.keys.first} = #{formatted_value}"
+        DB[:conn].execute(sql)
     end
 end
