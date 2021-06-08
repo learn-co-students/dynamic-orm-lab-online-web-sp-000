@@ -35,19 +35,17 @@ class InteractiveRecord
     values.join(', ')
   end
 
-  def self.save
-    DB[:conn].execute(
-      "INSERT INTO #{table_name_for_insert} (#{col_names_for_insert}) VALUES (?)",
-      [values_for_insert][0],
-    )
+  def self.find_by_name(name)
+    DB[:conn].execute("SELECT * FROM #{self.table_name} WHERE name = ?", [name])
+  end
 
-    @id =
-      DB[:conn].execute(
-        "SELECT last_insert_rowid() FROM #{table_name_for_insert}",
-      )[
-        0
-      ][
-        0
-      ]
+  def self.find_by(options = {})
+    result =
+      options.map do |property, value|
+        DB[:conn].execute(
+          "SELECT * FROM #{self.table_name} WHERE #{property} = ?",
+          value,
+        )
+      end.first
   end
 end
